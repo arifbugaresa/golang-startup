@@ -10,45 +10,45 @@ import (
 )
 
 type users struct {
-	ID               int
-	Name             string
-	Occupation       string
-	Email            string
-	PasswordHash    string
+	ID             int
+	Name           string
+	Occupation     string
+	Email          string
+	PasswordHash   string
 	AvatarFileName string
-	Role             string
-	Token            string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	Role           string
+	Token          string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
 
 type campaigns struct {
 	ID               int
 	UserId           int
-	Name              string
+	Name             string
 	ShortDescription string
-	Description       string
+	Description      string
 	GoalAmount       int
 	CurrentAmount    int
-	Perks             string
+	Perks            string
 	BackerCount      int
-	Slug              string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	Slug             string
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
 }
 
 type campaignImages struct {
 	ID          int
 	Campaign_id int
-	FileName   string
-	IsPrimary  bool
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	FileName    string
+	IsPrimary   bool
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func main() {
 
-	// Connect to database
+	//Connect to database
 	dsn := "host=localhost user=postgres password=paramadaksa dbname=startup port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -60,10 +60,15 @@ func main() {
 
 	db.AutoMigrate(&users{}, &campaigns{}, &campaignImages{})
 
-	var userDB []user.User
+	userRepository := user.NewRepository(db)
+	userService := user.NewService(userRepository)
 
-	db.Find(&userDB)
+	userInput := user.RegisterUserRequest{
+		Name: "Joko",
+		Email: "Joko@gmail.com",
+		Occupation: "Test",
+		Password: "password",
+	}
 
-	fmt.Println(len(userDB))
-
+	userService.RegisterUser(userInput)
 }
