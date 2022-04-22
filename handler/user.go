@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"golang-startup/helper"
 	"golang-startup/user"
 	"net/http"
 )
@@ -27,5 +28,6 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, nil)
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, helper.APIResponse("Account has been registered", http.StatusOK, "success", user))
+
 }
